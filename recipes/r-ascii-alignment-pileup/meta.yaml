@@ -1,0 +1,44 @@
+{% set name = 'ascii-alignment-pileup' %}
+{% set version = '1.2.1' %}
+{% set sha256 = '9e43e61e0a34be4faa816cac58ad8e108cebb497f28e857ca8abc4102dae4866' %}
+
+package:
+  name: r-{{ name }}
+  version: {{ version }}
+
+source:
+  url: https://git.scicore.unibas.ch/zavolan_group/tools/{{ name }}/-/archive/{{ version }}/{{ name }}{{ version }}.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  number: 0
+  script:  R CMD INSTALL --build . 
+  rpaths:
+    - lib/R/lib/
+    - lib/
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+  host:
+    - bioconductor-rtracklayer
+    - r-base
+    - r-optparse
+    - tabix
+  run:
+    - bioconductor-rtracklayer
+    - r-base
+    - r-optparse
+    - tabix
+
+test:
+  commands:
+    - $R -e "library('ascii-alignment-pileup')"
+
+about:
+  home: https://git.scicore.unibas.ch/zavolan_group/tools/ascii-alignment-pileup
+  summary: 'Generates an ASCII-style pileup of read alignments in one or more
+    BAM files against one or more regions specified in a BED file.
+  license: Apache-2.0
+  license_file: LICENSE
